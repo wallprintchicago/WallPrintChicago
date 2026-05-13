@@ -32,6 +32,8 @@
     .btn:hover { background: var(--terracotta-dark); transform: translateY(-1px); }
     .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
     .btn-ghost:hover { background: var(--ink); color: #fff; transform: translateY(-1px); }
+    .btn-gold { background: var(--gold); color: var(--ink); }
+    .btn-gold:hover { background: #D69E37; color: var(--ink); }
 
     .hero { padding: 4rem 2rem 4rem; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: center; background: linear-gradient(180deg, var(--cream) 0%, #fff 100%); }
     .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: #fff; color: var(--terracotta); font-size: 12px; padding: 6px 14px; border-radius: 99px; margin-bottom: 1.25rem; font-weight: 600; letter-spacing: 0.3px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
@@ -39,7 +41,7 @@
     .hero h1 { font-family: 'Fraunces', serif; font-size: 60px; font-weight: 500; line-height: 1.05; letter-spacing: -2px; margin-bottom: 1.25rem; }
     .hero h1 em { font-style: italic; color: var(--terracotta); }
     .hero p { font-size: 17px; color: var(--muted); margin-bottom: 2rem; max-width: 480px; }
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
     .hero-collage { position: relative; height: 480px; }
     .hero-collage .card { position: absolute; border-radius: 16px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.15); background: var(--cream-dark); }
     .hero-collage .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -110,6 +112,9 @@
     .book-section p { font-size: 17px; opacity: 0.95; margin-bottom: 2.25rem; }
     .book-section .btn { background: #fff; color: var(--terracotta); padding: 14px 30px; font-size: 15px; font-weight: 600; }
     .book-section .btn:hover { background: var(--ink); color: #fff; }
+    .book-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .book-section .btn-quote { background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.5); }
+    .book-section .btn-quote:hover { background: rgba(255,255,255,0.3); color: #fff; }
     .book-info { display: flex; justify-content: center; gap: 2.5rem; margin-top: 2.5rem; font-size: 14px; flex-wrap: wrap; opacity: 0.95; }
     .book-info span { display: flex; align-items: center; gap: 6px; }
 
@@ -131,7 +136,14 @@
     .form-field label .required { color: var(--terracotta); }
     .form-field input, .form-field select, .form-field textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-family: 'Inter', sans-serif; color: var(--ink); background: #fff; transition: border-color 0.2s; }
     .form-field input:focus, .form-field select:focus, .form-field textarea:focus { outline: none; border-color: var(--terracotta); box-shadow: 0 0 0 3px rgba(232,93,58,0.1); }
-    .form-field textarea { resize: vertical; min-height: 80px; }
+    .form-field textarea { resize: vertical; min-height: 70px; }
+    .form-field input[type="file"] { padding: 8px; cursor: pointer; }
+    .radio-group { display: flex; flex-direction: column; gap: 8px; }
+    .radio-option { display: flex; align-items: flex-start; gap: 10px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+    .radio-option:hover { border-color: var(--terracotta); background: var(--cream); }
+    .radio-option input[type="radio"] { margin-top: 3px; width: auto; cursor: pointer; accent-color: var(--terracotta); }
+    .radio-option:has(input:checked) { border-color: var(--terracotta); background: var(--cream-dark); }
+    .radio-label { font-size: 14px; color: var(--ink); }
     .submit-btn { width: 100%; background: var(--terracotta); color: #fff; border: none; padding: 13px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 0.5rem; transition: all 0.2s; font-family: 'Inter', sans-serif; }
     .submit-btn:hover { background: var(--terracotta-dark); }
     .submit-btn:disabled { background: var(--muted); cursor: not-allowed; }
@@ -140,6 +152,8 @@
     .success-msg .check { width: 64px; height: 64px; background: #DEF7E5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 32px; }
     .success-msg h3 { color: var(--ink); margin-bottom: 0.5rem; }
     .success-msg p { color: var(--muted); font-size: 15px; max-width: 380px; margin: 0 auto; }
+    .upload-field { display: none; }
+    .upload-field.show { display: block; }
 
     @media (max-width: 768px) {
       .hero { grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 1.25rem 2.5rem; }
@@ -169,9 +183,9 @@
     <a onclick="scrollToSection('gallery')">Gallery</a>
     <a onclick="scrollToSection('ideas')">Ideas</a>
     <a onclick="scrollToSection('process')">Process</a>
-    <a onclick="openModal()">Book a call</a>
+    <a onclick="openModal('book')">Book a call</a>
   </nav>
-  <button class="btn" onclick="openModal()">Book a call →</button>
+  <button class="btn" onclick="openModal('book')">Book a call →</button>
 </header>
 
 <section class="hero">
@@ -180,14 +194,15 @@
     <h1>Walls that tell <em>your</em> story.</h1>
     <p>Custom wall printing and murals for homes, restaurants, and offices — celebrating modern design and India's rich artistic heritage right here in Chicago.</p>
     <div class="hero-actions">
-      <button class="btn" onclick="openModal()">Book a free call</button>
+      <button class="btn" onclick="openModal('book')">Book a free call</button>
+      <button class="btn btn-gold" onclick="openModal('quote')">Get a quote ✨</button>
       <button class="btn btn-ghost" onclick="scrollToSection('gallery')">See our work</button>
     </div>
   </div>
   <div class="hero-collage">
-    <div class="card c1"><img src="https://picsum.photos/seed/wall1/600/420" alt="Wall art 1"/></div>
-    <div class="card c2"><img src="https://picsum.photos/seed/wall2/550/360" alt="Wall art 2"/></div>
-    <div class="card c3"><img src="https://picsum.photos/seed/wall3/400/400" alt="Wall art 3"/></div>
+    <div class="card c1"><img src="Ganesha01.jpg" alt="Ganesha wall art"/></div>
+    <div class="card c2"><img src="Krishna01.jpg" alt="Krishna wall art"/></div>
+    <div class="card c3"><img src="Laxmi01.jpg" alt="Laxmi wall art"/></div>
   </div>
 </section>
 
@@ -208,15 +223,15 @@
             </div>
           </div>
           <div class="carousel-slide">
-            <img src="https://picsum.photos/seed/printer2/900/506" alt="Mural creation"/>
+            <img src="Ganesha02.jpg" alt="Ganesha mural"/>
             <div class="slide-overlay">
               <div><div class="tag">Behind the scenes</div><div class="title">Crafting a Ganesha mural</div></div>
             </div>
           </div>
           <div class="carousel-slide">
-            <img src="https://picsum.photos/seed/printer3/900/506" alt="Installation process"/>
+            <img src="Krishna02.jpg" alt="Krishna installation"/>
             <div class="slide-overlay">
-              <div><div class="tag">Installation</div><div class="title">Restaurant wall transformation</div></div>
+              <div><div class="tag">Installation</div><div class="title">Heritage wall transformation</div></div>
             </div>
           </div>
         </div>
@@ -241,18 +256,23 @@
     <p>From traditional Indian heritage art to bold modern designs — explore some of our recent work.</p>
   </div>
   <div class="gallery">
-    <div class="tile wide"><img src="https://picsum.photos/seed/g1/800/520" alt="Radha Krishna"/><div class="tile-overlay"><div class="tag">Heritage</div><div class="title">Radha Krishna Mural</div></div></div>
-    <div class="tile"><img src="https://picsum.photos/seed/g2/400/520" alt="Ganesha"/><div class="tile-overlay"><div class="tag">Deity</div><div class="title">Lord Ganesha</div></div></div>
-    <div class="tile"><img src="https://picsum.photos/seed/g3/400/520" alt="Madhubani"/><div class="tile-overlay"><div class="tag">Folk Art</div><div class="title">Madhubani Style</div></div></div>
-    <div class="tile"><img src="https://picsum.photos/seed/g4/400/520" alt="Mandala"/><div class="tile-overlay"><div class="tag">Spiritual</div><div class="title">Mandala Designs</div></div></div>
-    <div class="tile"><img src="https://picsum.photos/seed/g5/400/520" alt="Tanjore"/><div class="tile-overlay"><div class="tag">Traditional</div><div class="title">Tanjore Gold Art</div></div></div>
-    <div class="tile wide"><img src="https://picsum.photos/seed/g6/800/520" alt="Indian home"/><div class="tile-overlay"><div class="tag">Residential</div><div class="title">Indian Home & Puja Rooms</div></div></div>
-    <div class="tile"><img src="https://picsum.photos/seed/g7/400/520" alt="Warli"/><div class="tile-overlay"><div class="tag">Tribal</div><div class="title">Warli Folk Art</div></div></div>
-    <div class="tile"><img src="https://picsum.photos/seed/g8/400/520" alt="Shiva"/><div class="tile-overlay"><div class="tag">Deity</div><div class="title">Lord Shiva</div></div></div>
-    <div class="tile"><img src="https://picsum.photos/seed/g9/400/520" alt="Botanical"/><div class="tile-overlay"><div class="tag">Nature</div><div class="title">Botanical Murals</div></div></div>
-    <div class="tile"><img src="https://picsum.photos/seed/g10/400/520" alt="Restaurant"/><div class="tile-overlay"><div class="tag">Commercial</div><div class="title">Restaurant Spaces</div></div></div>
-    <div class="tile wide"><img src="https://picsum.photos/seed/g11/800/520" alt="Abstract"/><div class="tile-overlay"><div class="tag">Modern</div><div class="title">Abstract & Geometric</div></div></div>
-    <div class="tile"><img src="https://picsum.photos/seed/g12/400/520" alt="Buddha"/><div class="tile-overlay"><div class="tag">Meditation</div><div class="title">Buddha & Lotus</div></div></div>
+    <div class="tile wide"><img src="Ganesha01.jpg" alt="Lord Ganesha"/><div class="tile-overlay"><div class="tag">Heritage</div><div class="title">Lord Ganesha</div></div></div>
+    <div class="tile"><img src="Krishna01.jpg" alt="Krishna"/><div class="tile-overlay"><div class="tag">Deity</div><div class="title">Lord Krishna</div></div></div>
+    <div class="tile"><img src="Laxmi01.jpg" alt="Goddess Laxmi"/><div class="tile-overlay"><div class="tag">Deity</div><div class="title">Goddess Laxmi</div></div></div>
+    <div class="tile"><img src="Bhudda01.jpg" alt="Buddha art"/><div class="tile-overlay"><div class="tag">Meditation</div><div class="title">Buddha & Lotus</div></div></div>
+    <div class="tile"><img src="Ganesha02.jpg" alt="Ganesha second"/><div class="tile-overlay"><div class="tag">Heritage</div><div class="title">Ganesha Mural</div></div></div>
+    <div class="tile"><img src="Krishna02.jpg" alt="Krishna second"/><div class="tile-overlay"><div class="tag">Heritage</div><div class="title">Radha Krishna</div></div></div>
+    <div class="tile wide"><img src="Krishna03.jpg" alt="Krishna mural"/><div class="tile-overlay"><div class="tag">Featured</div><div class="title">Krishna Heritage Series</div></div></div>
+    <div class="tile"><img src="Krishna04.jpg" alt="Krishna art"/><div class="tile-overlay"><div class="tag">Deity</div><div class="title">Divine Krishna</div></div></div>
+    <div class="tile"><img src="Krishna05.jpg" alt="Krishna design"/><div class="tile-overlay"><div class="tag">Spiritual</div><div class="title">Krishna Devotional</div></div></div>
+    <div class="tile"><img src="Food01.jpg" alt="Restaurant wall"/><div class="tile-overlay"><div class="tag">Commercial</div><div class="title">Restaurant Spaces</div></div></div>
+    <div class="tile"><img src="Random01.jpg" alt="Wall print"/><div class="tile-overlay"><div class="tag">Modern</div><div class="title">Modern Designs</div></div></div>
+    <div class="tile"><img src="Random02.jpg" alt="Wall art"/><div class="tile-overlay"><div class="tag">Custom</div><div class="title">Custom Wall Art</div></div></div>
+    <div class="tile"><img src="Image1.jpg" alt="Gallery"/><div class="tile-overlay"><div class="tag">Featured</div><div class="title">Custom Mural</div></div></div>
+    <div class="tile"><img src="image2.jpg" alt="Gallery"/><div class="tile-overlay"><div class="tag">Design</div><div class="title">Bespoke Print</div></div></div>
+    <div class="tile"><img src="image3.jpg" alt="Gallery"/><div class="tile-overlay"><div class="tag">Design</div><div class="title">Wall Transformation</div></div></div>
+    <div class="tile"><img src="image4.jpg" alt="Gallery"/><div class="tile-overlay"><div class="tag">Featured</div><div class="title">Statement Wall</div></div></div>
+    <div class="tile wide"><img src="image6.jpg" alt="Gallery"/><div class="tile-overlay"><div class="tag">Showcase</div><div class="title">Recent Project</div></div></div>
   </div>
 </section>
 
@@ -293,8 +313,11 @@
 <section class="book-section" id="book">
   <div class="book-content">
     <h2>Let's bring your wall to life</h2>
-    <p>Book a free 20-minute call. No pressure, no commitment — just honest advice and ideas tailored to your space.</p>
-    <button class="btn" onclick="openModal()">Book a free call →</button>
+    <p>Book a free 20-minute call or get a quick quote. No pressure, no commitment — just honest advice.</p>
+    <div class="book-actions">
+      <button class="btn" onclick="openModal('book')">Book a free call →</button>
+      <button class="btn btn-quote" onclick="openModal('quote')">Get a quote ✨</button>
+    </div>
     <div class="book-info">
       <span>📞 Free 20-min consultation</span>
       <span>📍 Serving Chicago & suburbs</span>
@@ -310,13 +333,14 @@
   </div>
 </footer>
 
-<div class="modal-backdrop" id="modal" onclick="if(event.target===this)closeModal()">
+<!-- BOOK A CALL MODAL -->
+<div class="modal-backdrop" id="modal-book" onclick="if(event.target===this)closeModal('book')">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div id="form-content">
+    <button class="modal-close" onclick="closeModal('book')">✕</button>
+    <div id="form-content-book">
       <h3>Book your free call</h3>
       <p class="modal-sub">Fill in a few details and we'll reach out within 24 hours.</p>
-      <form id="bookingForm" onsubmit="handleSubmit(event)">
+      <form id="bookingForm" onsubmit="handleSubmit(event, 'book')">
         <div class="form-row">
           <div class="form-field">
             <label>Full name <span class="required">*</span></label>
@@ -393,8 +417,79 @@
             <option>Other</option>
           </select>
         </div>
-        <button type="submit" class="submit-btn" id="submitBtn">Submit & Book My Call →</button>
+        <button type="submit" class="submit-btn" id="submitBtn-book">Submit & Book My Call →</button>
         <p class="form-note">We respect your privacy. Your information is never shared.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- GET A QUOTE MODAL -->
+<div class="modal-backdrop" id="modal-quote" onclick="if(event.target===this)closeModal('quote')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('quote')">✕</button>
+    <div id="form-content-quote">
+      <h3>Get a quick quote ✨</h3>
+      <p class="modal-sub">Share a few details and we'll send you a personalised quote within 24 hours.</p>
+      <form id="quoteForm" onsubmit="handleSubmit(event, 'quote')">
+        <div class="form-field">
+          <label>Full name <span class="required">*</span></label>
+          <input type="text" name="name" required placeholder="Your name"/>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Email <span class="required">*</span></label>
+            <input type="email" name="email" required placeholder="you@example.com"/>
+          </div>
+          <div class="form-field">
+            <label>Phone (optional)</label>
+            <input type="tel" name="phone" placeholder="(312) 555-0100"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Location <span class="required">*</span></label>
+            <input type="text" name="location" required placeholder="City or ZIP code"/>
+          </div>
+          <div class="form-field">
+            <label>Size of art <span class="required">*</span></label>
+            <select name="size" required>
+              <option value="">Select one</option>
+              <option>Small (under 50 sq ft)</option>
+              <option>Medium (50-150 sq ft)</option>
+              <option>Large (150+ sq ft)</option>
+              <option>Not sure</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Do you have a design in mind? <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="designChoice" value="Have my own design" required onchange="toggleUpload(true)"/>
+              <span class="radio-label">Yes, I have my own image/design</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="designChoice" value="Want custom design" required onchange="toggleUpload(false)"/>
+              <span class="radio-label">No, I want a custom design from your team</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="designChoice" value="Not sure yet" required onchange="toggleUpload(false)"/>
+              <span class="radio-label">Not sure yet — would love to explore options</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-field upload-field" id="upload-field">
+          <label>Upload your design (optional)</label>
+          <input type="file" name="designFile" id="designFile" accept="image/*"/>
+          <p class="form-note" style="text-align:left;margin-top:6px;">JPG, PNG up to 5MB. We'll review your image and include it in the quote.</p>
+        </div>
+        <div class="form-field">
+          <label>Additional notes (optional)</label>
+          <textarea name="notes" placeholder="Anything else we should know?"></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn-quote">Send Me My Quote →</button>
+        <p class="form-note">We'll get back to you within 24 hours.</p>
       </form>
     </div>
   </div>
@@ -402,48 +497,77 @@
 
 <script>
   // === GOOGLE SHEETS INTEGRATION ===
-  // After deploying your Apps Script (instructions provided separately),
-  // paste your Web App URL between the quotes below:
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYQar1u5UHAsql02gWe9X9YZP_qS9BO7QSFsF3UgfFgIcxSl69wJqjIOiH1g7nDUfF3w/exec";
+  const GOOGLE_SCRIPT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
   // ==================================
 
   function scrollToSection(id) {
     document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
   }
 
-  function openModal() {
-    document.getElementById('modal').classList.add('active');
+  function openModal(type) {
+    document.getElementById('modal-' + type).classList.add('active');
     document.body.style.overflow = 'hidden';
   }
-  function closeModal() {
-    document.getElementById('modal').classList.remove('active');
+  function closeModal(type) {
+    document.getElementById('modal-' + type).classList.remove('active');
     document.body.style.overflow = '';
     setTimeout(() => {
-      const original = document.getElementById('original-form');
-      if (original) document.getElementById('form-content').innerHTML = original.innerHTML;
+      const original = document.getElementById('original-form-' + type);
+      if (original) document.getElementById('form-content-' + type).innerHTML = original.innerHTML;
     }, 300);
   }
 
-  async function handleSubmit(e) {
+  function toggleUpload(show) {
+    const uploadField = document.getElementById('upload-field');
+    if (uploadField) uploadField.classList.toggle('show', show);
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function handleSubmit(e, type) {
     e.preventDefault();
     const form = e.target;
-    const btn = document.getElementById('submitBtn');
+    const btn = document.getElementById('submitBtn-' + type);
     btn.disabled = true;
     btn.textContent = 'Sending...';
 
     const formData = new FormData(form);
-    const data = {
+    let data = {
+      type: type === 'book' ? 'Booking' : 'Quote',
       timestamp: new Date().toLocaleString(),
-      name: formData.get('name'),
-      phone: formData.get('phone'),
-      email: formData.get('email'),
-      space: formData.get('space'),
-      service: formData.get('service'),
-      size: formData.get('size'),
-      timeline: formData.get('timeline'),
-      message: formData.get('message'),
-      source: formData.get('source')
+      name: formData.get('name') || '',
+      phone: formData.get('phone') || '',
+      email: formData.get('email') || '',
+      location: formData.get('location') || '',
+      space: formData.get('space') || '',
+      service: formData.get('service') || '',
+      size: formData.get('size') || '',
+      timeline: formData.get('timeline') || '',
+      message: formData.get('message') || formData.get('notes') || '',
+      source: formData.get('source') || '',
+      designChoice: formData.get('designChoice') || ''
     };
+
+    if (type === 'quote') {
+      const fileInput = document.getElementById('designFile');
+      if (fileInput && fileInput.files[0]) {
+        try {
+          const file = fileInput.files[0];
+          data.fileName = file.name;
+          data.fileType = file.type;
+          data.fileData = await fileToBase64(file);
+        } catch (err) {
+          console.error('File error:', err);
+        }
+      }
+    }
 
     try {
       if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes('PASTE_YOUR')) {
@@ -454,29 +578,34 @@
           body: JSON.stringify(data)
         });
       }
-      showSuccess();
+      showSuccess(type);
     } catch (err) {
       console.error(err);
-      showSuccess(); // Still show success since no-cors hides errors
+      showSuccess(type);
     }
   }
 
-  function showSuccess() {
-    document.getElementById('form-content').innerHTML = `
+  function showSuccess(type) {
+    const msg = type === 'book'
+      ? "We've received your details and will be in touch within 24 hours to schedule your free consultation. Looking forward to bringing your wall to life!"
+      : "We've received your request and will send your personalised quote within 24 hours. Thanks for considering Wall Print Chicago!";
+    document.getElementById('form-content-' + type).innerHTML = `
       <div class="success-msg">
         <div class="check">✓</div>
         <h3>Thank you!</h3>
-        <p>We've received your details and will be in touch within 24 hours to schedule your free consultation. Looking forward to bringing your wall to life!</p>
+        <p>${msg}</p>
       </div>
     `;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const original = document.createElement('div');
-    original.id = 'original-form';
-    original.style.display = 'none';
-    original.innerHTML = document.getElementById('form-content').innerHTML;
-    document.body.appendChild(original);
+    ['book', 'quote'].forEach(type => {
+      const original = document.createElement('div');
+      original.id = 'original-form-' + type;
+      original.style.display = 'none';
+      original.innerHTML = document.getElementById('form-content-' + type).innerHTML;
+      document.body.appendChild(original);
+    });
   });
 
   // Carousel
@@ -505,7 +634,7 @@
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape') { closeModal('book'); closeModal('quote'); }
   });
 </script>
 
